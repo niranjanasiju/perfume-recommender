@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfume Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Find Your Perfect Scent</h1>
+    
+    <form id="questionnaire">
+        <label>1. How would you describe your personality?</label>
+        <input type="text" name="q1" required>
+
+        <label>2. What kind of places do you enjoy visiting?</label>
+        <input type="text" name="q2" required>
+
+        <label>3. Do you prefer sweet, floral, or woody scents?</label>
+        <input type="text" name="q3" required>
+
+        <label>4. What is your ideal season?</label>
+        <input type="text" name="q4" required>
+
+        <label>5. What mood do you want your perfume to reflect?</label>
+        <input type="text" name="q5" required>
+
+        <button type="submit">Get Recommendation</button>
+    </form>
+
+    <div id="recommendation" class="recommendation-box" style="display: none;"></div>
+
+    <script>
+        document.getElementById("questionnaire").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+            let data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+
+            let response = await fetch("/recommend", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            let result = await response.json();
+            
+            if (result.scent) {
+                let formattedOutput = formatRecommendation(result.scent);
+                document.getElementById("recommendation").innerHTML = formattedOutput;
+                document.getElementById("recommendation").style.display = "block";
+            } else {
+                document.getElementById("recommendation").innerHTML = "<p>Something went wrong. Try again!</p>";
+                document.getElementById("recommendation").style.display = "block";
+            }
+        });
+
+        function formatRecommendation(text) {
+            let lines = text.split("\n"); // Split by new line
+            let formattedText = "<h2>Recommended Scent:</h2>";
+
+            lines.forEach(line => {
+                if (line.includes(":")) {
+                    let parts = line.split(":");
+                    formattedText += `<h3>${parts[0].trim()}:</h3><p>${parts[1].trim()}</p>`;
+                } else {
+                    formattedText += `<p>${line.trim()}</p>`;
+                }
+            });
+
+            return formattedText;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Node.js
+node_modules/
+.next/
+package-lock.json
+
+# Python
+__pycache__/
+myenv/
+.env
+
+# MacOS
+.DS_Store
