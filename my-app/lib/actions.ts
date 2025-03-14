@@ -10,7 +10,7 @@ interface PerfumeFormData {
 
 export async function recommendPerfume(data: PerfumeFormData): Promise<string> {
   try {
-    const response = await fetch("http://localhost:5001/recommend", {
+    const response = await fetch("https://perfume-recommender-6xu1.onrender.com/recommend", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
