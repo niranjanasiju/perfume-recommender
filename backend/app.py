@@ -51,6 +51,7 @@ def recommend():
 
         User Responses:
         {user_responses}
+        Avoid any introductory text, just return the formatted recommendation.
         """
 
         response = model.generate_content(prompt)
