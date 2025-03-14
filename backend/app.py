@@ -21,6 +21,10 @@ def clean_markdown(text):
     """Removes Markdown-style bold formatting from the AI response."""
     return re.sub(r"\*\*", "", text)
 
+@app.route("/")
+def home():
+    return "Backend is running!"
+
 @app.route("/recommend", methods=["POST"])
 def recommend():
     try:
